@@ -1,3 +1,4 @@
+%define keepstatic 1
 Name:       graphite2
 Summary:    A smart font system for complex lesser-known languages of the world
 Version:    1.3.14
@@ -22,11 +23,17 @@ Requires: %{name} = %{version}
 %description devel
 Headers and auxiliary files for developing applications with %{name}.
 
+%package devel-static
+Summary:  Development headers for %{name}
+
+%description devel-static
+Headers and auxiliary files for developing applications with %{name}.
+
 %prep
 %autosetup -n %{name}-%{version}/upstream
 
 %build
-%cmake .
+%cmake -DBUILD_SHARED_LIBS=OFF . 
 %make_build
 
 %install
@@ -40,11 +47,15 @@ Headers and auxiliary files for developing applications with %{name}.
 %defattr(-,root,root,-)
 %license LICENSE COPYING
 %{_bindir}/gr2fonttest
-%{_libdir}/libgraphite2.so.*
+#%{_libdir}/libgraphite2.so.*
 
 %files devel
 %defattr(-,root,root,-)
 %{_includedir}/%{name}/
-%{_libdir}/*.so
+#%{_libdir}/*.so
 %{_libdir}/pkgconfig/%{name}.pc
 %{_datadir}/%{name}
+
+%files devel-static
+%defattr(-,root,root,-)
+%{_libdir}/*.a
